@@ -230,7 +230,7 @@ export const MainContainer = () => {
 ].map((step, index) => (
     <div key={index} className="bg-white rounded-lg shadow-md p-6 transition duration-150 ease-in-out hover:scale-105 cursor-pointer">
         <div className="text-3xl font-semibold text-blue-600 mb-4"></div>
-        <h3 className="text-xl font-semibold mb-2 text-gray-800">{step.title}</h3>
+        <h3 className="text-xl font-semibold mb-2 text-blue-600">{step.title}</h3>
         <p className="text-gray-600">{step.description}</p>
     </div>
 ))}
