@@ -1,7 +1,6 @@
 "use client";
 
 import Link from 'next/link'
-import { CiMail } from 'react-icons/ci';
 import { FaWhatsapp, FaLinkedin, FaGithub, FaTelegram } from 'react-icons/fa'; // Import icons
 import { IoMdMailOpen } from 'react-icons/io';
 
