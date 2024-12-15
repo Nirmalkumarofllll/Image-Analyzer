@@ -24,7 +24,7 @@ export const Header = () => {
             </div>
             {/* menus */}
             <nav>
-              <ul className="flex space-x-4">
+              <ul className="flex space-x-4"> 
                 <Link href={"#how-it-works"} className="text-gray-600 hover:text-blue-600 transition duration-150 ease-in-out">
                 How it works</Link>
                 <Link href={"#features"} className="text-gray-600 hover:text-blue-600 transition duration-150 ease-in-out">

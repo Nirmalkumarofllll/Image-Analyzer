@@ -45,7 +45,10 @@ export const Footer = () => {
             <ul className="text-gray-600 space-y-2">
             <li><a href="https://nk-codepen-clone.web.app/" target='blank' className="hover:text-blue-600 transition duration-150 ease-in-out">
                 Online Coding Platform
-              </a> </li>             
+              </a> </li>   
+              <li><a href="file:///C:/Users/Nirmal/Desktop/Nirmal/project/Github/Portfolio/Foodapp.html" target='blank' className="hover:text-blue-600 transition duration-150 ease-in-out">
+                Food App
+              </a> </li>           
               <li><a href="https://nirmalkumarofllll.github.io/Portfolio/IDS.html" target='blank' className="hover:text-blue-600 transition duration-150 ease-in-out">
                 IDS
               </a></li> 
