@@ -43,6 +43,9 @@ export const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-blue-600 mb-4">Our Projects</h3>
             <ul className="text-gray-600 space-y-2">
+            <li><a href="https://nirmalkumarofllll.github.io/Portfolio/index.html" target='blank' className="hover:text-blue-600 transition duration-150 ease-in-out">
+                Portfolio
+              </a> </li>   
             <li><a href="https://nk-codepen-clone.web.app/" target='blank' className="hover:text-blue-600 transition duration-150 ease-in-out">
                 Online Coding Platform
               </a> </li>   
