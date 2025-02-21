@@ -1,8 +1,8 @@
 <h1 align="center">Image Analyzer</h1>
 
-> Check out My Live project: <a href="https://nk-image-ai-analyzer.vercel.app/" target="_blank">Image Analyzer</a>
+> Check out my Live project: <a href="https://nk-image-ai-analyzer.vercel.app/" target="_blank">Image Analyzer</a>
 
-> Check out My portfolio: [Portfolio](https://nirmalkumarofllll.github.io/Portfolio/)
+> Check out my portfolio: [Portfolio](https://nirmalkumarofllll.github.io/Portfolio/)
 
 ## Login
 
@@ -11,4 +11,4 @@ The Image Analyzer project is an innovative AI-driven application designed to en
 
 ![Homepage](./imgs/image_analyzer.png)
 
-> Learn How to do this project: [Project](https://nirmalkumarofllll.github.io/Portfolio/Image_Analyzer.html)
+> Learn how to do this project: [Project](https://nirmalkumarofllll.github.io/Portfolio/Image_Analyzer.html)
