@@ -11,4 +11,4 @@ The Image Analyzer project is an innovative AI-driven application designed to en
 
 ![Homepage](./imgs/image_analyzer.png)
 
-> Learn How to do this project: [Portfolio](https://nirmalkumarofllll.github.io/Portfolio/Image_Analyzer.html)
+> Learn How to do this project: [Project](https://nirmalkumarofllll.github.io/Portfolio/Image_Analyzer.html)
