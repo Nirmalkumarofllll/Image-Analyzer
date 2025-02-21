@@ -1,6 +1,6 @@
-<h1 align="center">A Realtime Online Coding Platform</h1>
+<h1 align="center">Image Analyzer</h1>
 
-> Check out My Live project: <a href="https://nk-codepen-clone.web.app/" target="_blank">nk-codepen-clone</a>
+> Check out My Live project: <a href="https://nk-image-ai-analyzer.vercel.app/" target="_blank">Image Analyzer</a>
 
 > Check out My portfolio: [Portfolio](https://nirmalkumarofllll.github.io/Portfolio/)
 
