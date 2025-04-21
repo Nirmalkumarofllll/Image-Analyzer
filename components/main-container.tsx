@@ -215,8 +215,8 @@ export const MainContainer = () => {
                             <h4 className='text-lg font-semibold mb-2 text-blue-700'>Related Questions</h4>
                             <ul className='space-y-2'>
                                 {relatedQuestion.map((question, index) => (
-                                    
-                                        <button type='button' onClick={() => askRelatedQuestion(question)} className='text-left w-full bg-blue-200 text-blue-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-300 transition duration-150 ease-in-out'>{question}</button>
+                                        
+                                        <button type='button' key={index} onClick={() => askRelatedQuestion(question)} className='text-left w-full bg-blue-200 text-blue-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-300 transition duration-150 ease-in-out'>{question}</button>
                                    
                                 ))}
                             </ul>
