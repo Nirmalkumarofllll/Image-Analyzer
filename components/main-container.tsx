@@ -78,44 +78,65 @@ export const MainContainer = () => {
         }
     };
 
-    const generateKeywords = (text:string) => {
-        const words = text.split(/\s+/)
-        const keywordsSet = new Set<string>();
-
-        words.forEach ( word => {
-            if (words.length > 4 && !["this", "that", "with", "from", "have" ,"is" ,"a" ,"are" ,"was" ,"the" ,"of" ,"what" ,"which" ,"for" ,"at","an"].
-                includes(word.toLowerCase())){
-                    keywordsSet.add(word);
-                }
+    const generateKeywords = async (text: string) => {
+        const genAI = new GoogleGenerativeAI(
+            process.env.NEXT_PUBLIC_GOOGLE_API_KEY!
+        );
+    
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
         });
-        setKeywords(Array.from(keywordsSet).slice(0,5));
+    
+        try {
+            const result = await model.generateContent([
+                `Based on the following information about an image, generate 5 highly relevant keywords or phrases that summarize the main ideas or topics. Format the output as a list with one keyword or phrase per line:\n\n${text}`
+            ]);
+            const response = await result.response;
+            const keywords = response
+                .text()
+                .trim()
+                .split("\n")
+                .map(k => k.replace(/\*/g, "").trim())
+                .filter(Boolean);
+            setKeywords(keywords);
+        } catch (error) {
+            console.log((error as Error)?.message);
+            setKeywords([]);
+        }
     };
+    
 
     const regenerateContent= (Keyword : string) => {
         identifyImage(`Focus more on aspects related to this "${Keyword}".`,)
     };
 
-    const generateRelatedQuestions = async(text : string) => {
-        const genAI =new GoogleGenerativeAI(
+    const generateRelatedQuestions = async (text: string) => {
+        const genAI = new GoogleGenerativeAI(
             process.env.NEXT_PUBLIC_GOOGLE_API_KEY!
         );
-
-        const model =genAI.getGenerativeModel({
+    
+        const model = genAI.getGenerativeModel({
             model: "gemini-1.5-flash",
         });
-
+    
         try {
             const result = await model.generateContent([
-                `Based on the following information about an image, generate 5 related questions that someone might ask to learn more about the subject: ${text} Format the output as a simple list of questions, one per line`,
+                `Based on the following information about an image, generate 5 related questions that someone might ask to learn more about the subject. Format the output as a simple list of questions, one per line:\n\n${text}`
             ]);
-            const response = await result.response
-            const questions = response.text().trim().split("\n")
+            const response = await result.response;
+            const questions = response
+                .text()
+                .trim()
+                .split("\n")
+                .map(q => q.replace(/\*/g, "").trim())
+                .filter(Boolean);
             setRelatedQuestion(questions);
         } catch (error) {
-            console.log((error as Error)?.message);     
-            setRelatedQuestion([])    
+            console.log((error as Error)?.message);
+            setRelatedQuestion([]);
         }
     };
+    
 
     const askRelatedQuestion = (question : string) => {
         identifyImage(`Answer the following question about the image :  "${question}".`,)
@@ -159,42 +180,33 @@ export const MainContainer = () => {
                 <div className='bg-blue-50 p-8 border-t border-blue-100'>
                     <h3 className='text-2xl font-bold text-blue-800 mb-4'>Image Information</h3>
                     <div className='max-w-none'>
-                    {result.split("\n").map((line, index) => {
-    if (line.startsWith("Important Information:") || line.startsWith("Other Information:")) {
-        return (
-            <h4 key={index} className="text-xl font-semibold mt-4 mb-2 text-blue-700">
-                {line}
-            </h4>
-        );
-    } else if (line.match(/^\d+\./) || line.startsWith("-")) {
-        return (
-            <li key={index} className="ml-4 mb-2 text-gray-700">
-                {line}
-            </li>
-        );
-    } else if (line.trim() !== "") {
-        return (
-            <p key={index} className="mb-2 text-gray-800">
-                {line}
-            </p>
-        );
-    }
-    return null;
-})}
+                        {
+                            result.split("\n").map((line, index) => {
+                                if(line.startsWith("Important Information:") || line.
+                                startsWith("Other Information:")){
+                                    return (
+                                        <h4 className='text-xl font-semibold mt-4 mb-2 text-blue-700' key={index}>{line}</h4>
+                                    )
+                                }else if(line.match(/^\d+\./) || line.startsWith("-")){
+                                    return (
+                                        <li key={index} className='ml-4 mb-2 text-gray-700'>{line}</li>
+                                    );
+                                }else if(line.trim() !== ""){
+                                    return (
+                                        <p key={index} className='mb-2 text-gray-800'>{line}</p>
+                                    );
+                                }
+                                return null;
+                            }
+                        )}
                     </div>
 
                     <div className='mt-6'>
                         <h4 className='text-lg font-semibold mb-2 text-blue-700'>Related Keywords</h4>
                         <div className='flex flex-wrap gap-2'>
-                        {keywords.map((keyword, index) => (
-    <button 
-        key={index}
-        type="button" 
-        onClick={() => regenerateContent(keyword)} 
-        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200 trasnsition duration-150 ease-in-out">
-        {keyword}
-    </button>
-))}
+                            {keywords.map((keyword, index) => (
+                                <button type='button' key={index} onClick={() => regenerateContent(keyword)} className='bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200 trasnsition duration-150 ease-in-out'>{keyword}</button>
+                            ))}
                         </div>
                     </div>
 
@@ -202,16 +214,11 @@ export const MainContainer = () => {
                         <div className='mt-6'>
                             <h4 className='text-lg font-semibold mb-2 text-blue-700'>Related Questions</h4>
                             <ul className='space-y-2'>
-                            {relatedQuestion.map((question, index) => (
-  <button 
-    key={index} // Add key prop here
-    type='button' 
-    onClick={() => askRelatedQuestion(question)} 
-    className='text-left w-full bg-blue-200 text-blue-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-300 transition duration-150 ease-in-out'>
-    {question}
-  </button>
-))}
-
+                                {relatedQuestion.map((question, index) => (
+                                    
+                                        <button type='button' onClick={() => askRelatedQuestion(question)} className='text-left w-full bg-blue-200 text-blue-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-300 transition duration-150 ease-in-out'>{question}</button>
+                                   
+                                ))}
                             </ul>
                         </div>
                     ) }
@@ -223,18 +230,19 @@ export const MainContainer = () => {
                 How It Works
             </h2>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-            {[
-    { title: "Upload Image", description: "Start by uploading an image in any of the supported formats. Make sure the file size is within the limits." },
-    { title: "AI Analysis", description: "Our advanced AI will analyze the uploaded image and extract detailed information about its contents." },
-    { title: "Get Results", description: "Once the analysis is complete, you will receive the results with a breakdown of the image's contents." }
-].map((step, index) => (
-    <div key={index} className="bg-white rounded-lg shadow-md p-6 transition duration-150 ease-in-out hover:scale-105 cursor-pointer">
-        <div className="text-3xl font-semibold text-blue-600 mb-4"></div>
-        <h3 className="text-xl font-semibold mb-2 text-blue-600">{step.title}</h3>
-        <p className="text-gray-600">{step.description}</p>
-    </div>
-))}
-
+        {[
+            { title: "Upload Image", description: "Start by uploading an image in any of the supported formats. Make sure the file size is within the limits." },
+            { title: "AI Analysis", description: "Our advanced AI will analyze the uploaded image and extract detailed information about its contents." },
+            { title: "Get Results", description: "Once the analysis is complete, you will receive the results with a breakdown of the image's contents." }
+        ].map((step, index) => (
+            <div key={index} className='bg-white rounded-lg shadow-md p-6 transition duration-150 ease-in-out hover:scale-105 cursor-pointer'>
+                <div className='text-3xl font-semibold text-blue-600 mb-4'>
+                    {index + 1}
+                </div>
+                <h3 className='text-xl font-semibold mb-2 text-gray-800'>{step.title}</h3>
+                <p className='text-gray-600'>{step.description}</p>
+            </div>
+        ))}
             </div>
         </section>
 
@@ -243,18 +251,17 @@ export const MainContainer = () => {
         Features
     </h2>
     <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-    {[
-    { title: "Accurate Identification", description: "Our AI system provides precise and reliable image identification, ensuring you get accurate results every time." },
-    { title: "Detailed Information", description: "Receive in-depth analysis with detailed information about every aspect of your uploaded image." },
-    { title: "Fast Results", description: "Enjoy quick processing and get your image analysis results in a matter of seconds, saving you time." },
-    { title: "User Friendly Interface", description: "Navigate through our intuitive and user-friendly interface with ease, making the experience seamless." }
-].map((feature, index) => (
-    <div key={index} className="bg-white rounded-lg shadow-md p-6 transition duration-150 ease-in-out hover:scale-105 cursor-pointer">
-        <h3 className="text-xl font-semibold mb-2 text-blue-600">{feature.title}</h3>
-        <p className="text-gray-600">{feature.description}</p>
-    </div>
-))}
-
+        {[
+            { title: "Accurate Identification", description: "Our AI system provides precise and reliable image identification, ensuring you get accurate results every time." },
+            { title: "Detailed Information", description: "Receive in-depth analysis with detailed information about every aspect of your uploaded image." },
+            { title: "Fast Results", description: "Enjoy quick processing and get your image analysis results in a matter of seconds, saving you time." },
+            { title: "User Friendly Interface", description: "Navigate through our intuitive and user-friendly interface with ease, making the experience seamless." }
+        ].map((feature, index) => (
+            <div key={index} className='bg-white rounded-lg shadow-md p-6 transition duration-150 ease-in-out hover:scale-105 cursor-pointer'>
+                <h3 className='text-xl font-semibold mb-2 text-blue-600'>{feature.title}</h3>
+                <p className='text-gray-600'>{feature.description}</p>
+            </div>
+        ))}
     </div>
 </section>
 
